@@ -162,8 +162,8 @@ async function searchUnsplash(query, apiKey) {
     }
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(`Unsplash ${res.status}: ${err.errors?.[0] || res.statusText}`);
+    const body = await res.text().catch(() => '');
+    throw new Error(`Unsplash ${res.status}: ${body}`);
   }
   const data = await res.json();
   return data.results.map(photo => ({
