@@ -51,15 +51,16 @@ async function doSearch() {
   let searchQuery = query;
   let summarized = false;
 
-  if (query.length > 10 && openrouterKey) {
-    try {
+  if (query.length > 10) {
+    if (openrouterKey) {
       const keywords = await summarizeWithOpenRouter(query, openrouterKey);
       if (keywords) {
         searchQuery = keywords;
         summarized = true;
       }
-    } catch (e) {
-      // fallback to original text
+    }
+    if (searchQuery.length > 50) {
+      searchQuery = searchQuery.replace(/[：。！？，、；"“”''（）—…\n\r#*\-_]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 50);
     }
   }
 
@@ -86,6 +87,8 @@ async function doSearch() {
 
     if (summarized) {
       showStatus(`已提取关键词：${searchQuery}`, 'info');
+    } else if (searchQuery !== query) {
+      showStatus(`原文较长，截取前50字符搜索`, 'info');
     }
 
     const results = await Promise.allSettled(promises);
@@ -124,37 +127,62 @@ async function doSearch() {
 }
 
 async function summarizeWithOpenRouter(text, apiKey) {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/opencode',
-      'X-Title': '配图助手',
-    },
-    body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-lite-preview-02-05:free',
-      messages: [
-        {
-          role: 'user',
-          content: `将以下文字总结为最多5个关键词用于图片搜索，只返回关键词用空格分隔，不要任何解释和标点符号：\n\n${text}`
-        }
-      ],
-      max_tokens: 50,
-      temperature: 0.3,
-    })
-  });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
 
-  if (!res.ok) {
-    return null;
+    try {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://github.com/opencode',
+          'X-Title': 'PeiTu',
+        },
+        body: JSON.stringify({
+          model: 'openrouter/free',
+          messages: [
+            {
+              role: 'system',
+              content: '你是一个关键词提取助手。只输出空格分隔的关键词，不要任何解释。'
+            },
+            {
+              role: 'user',
+              content: `为以下文字提取最多5个图片搜索关键词：\n\n${text}`
+            }
+          ],
+          max_tokens: 200,
+          temperature: 0.3,
+        }),
+        signal: controller.signal
+      });
+
+      if (res.status === 429) {
+        const body = await res.json().catch(() => ({}));
+        const retryAfter = (body?.error?.metadata?.retry_after_seconds || 2) * 1000;
+        await new Promise(r => setTimeout(r, retryAfter));
+        continue;
+      }
+
+      if (!res.ok) {
+        return null;
+      }
+
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content?.trim();
+      if (!content) return null;
+
+      const words = content.split(/[\s,，、]+/).filter(Boolean).slice(0, 5);
+      return words.length > 0 ? words.join(' ') : null;
+    } catch (e) {
+      if (attempt === 1) return null;
+      await new Promise(r => setTimeout(r, 1000));
+    } finally {
+      clearTimeout(timer);
+    }
   }
-
-  const data = await res.json();
-  const content = data?.choices?.[0]?.message?.content?.trim();
-  if (!content) return null;
-
-  const words = content.split(/[\s,，、]+/).filter(Boolean).slice(0, 5);
-  return words.length > 0 ? words.join(' ') : null;
+  return null;
 }
 
 async function searchUnsplash(query, apiKey) {
