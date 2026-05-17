@@ -20,7 +20,7 @@
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "配图助手"
+    "default_title": "__MSG_extName__"
   },
   "options_page": "options/options.html",
   "icons": {
