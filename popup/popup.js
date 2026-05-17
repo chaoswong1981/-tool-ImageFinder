@@ -102,11 +102,15 @@ async function doSearch() {
 
     if (allImages.length === 0) {
       const errorMsg = errors.length > 0
-        ? `搜索失败：${errors.join('；')}`
+        ? `搜索失败：${errors.join('；')}。请检查设置中的 API 密钥是否有效`
         : '未找到相关图片，试试其他关键词';
       showStatus(errorMsg, 'error');
       showEmptyState();
       return;
+    }
+
+    if (errors.length > 0) {
+      showStatus(`部分源不可用：${errors.join('；')}`, 'info');
     }
 
     renderImages(allImages, searchQuery);
