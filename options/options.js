@@ -10,10 +10,10 @@ document.querySelectorAll('.toggle-visibility').forEach(btn => {
     const input = document.getElementById(btn.dataset.target);
     if (input.type === 'password') {
       input.type = 'text';
-      btn.textContent = '隐藏';
+      btn.textContent = t('hide');
     } else {
       input.type = 'password';
-      btn.textContent = '显示';
+      btn.textContent = t('show');
     }
   });
 });
@@ -24,15 +24,15 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
   const openrouterKey = document.getElementById('openrouterKey').value.trim();
 
   if (!unsplashKey && !pexelsKey) {
-    showSaveStatus('请至少配置一个图片搜索 API 密钥', 'error');
+    showSaveStatus(t('saveAtLeastOne'), 'error');
     return;
   }
 
   try {
     await chrome.storage.sync.set({ unsplashKey, pexelsKey, openrouterKey });
-    showSaveStatus('✅ 保存成功！密钥已安全存储在本地', 'success');
+    showSaveStatus(t('saveSuccess'), 'success');
   } catch (err) {
-    showSaveStatus(`❌ 保存失败：${err.message}`, 'error');
+    showSaveStatus(`${t('saveError')}${err.message}`, 'error');
   }
 });
 

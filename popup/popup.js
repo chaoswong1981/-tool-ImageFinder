@@ -31,17 +31,17 @@ searchBtn.addEventListener('click', doSearch);
 async function doSearch() {
   let query = textInput.value.trim();
   if (!query) {
-    showStatus('请输入要搜索的文字', 'error');
+    showStatus(t('statusInputEmpty'), 'error');
     textInput.focus();
     return;
   }
   if (query.length < 2) {
-    showStatus('请输入至少2个字符', 'error');
+    showStatus(t('statusTooShort'), 'error');
     return;
   }
 
   searchBtn.disabled = true;
-  searchBtn.textContent = '搜索中...';
+  searchBtn.textContent = t('searching');
   hideStatus();
   showLoading();
   resultsDiv.scrollTop = 0;
@@ -80,15 +80,15 @@ async function doSearch() {
     }
 
     if (promises.length === 0) {
-      showStatus('请先在设置中配置图片搜索 API 密钥', 'error');
+      showStatus(t('statusNoKey'), 'error');
       showEmptyState();
       return;
     }
 
     if (summarized) {
-      showStatus(`已提取关键词：${searchQuery}`, 'info');
+      showStatus(t('statusExtracted') + searchQuery, 'info');
     } else if (searchQuery !== query) {
-      showStatus(`原文较长，截取前50字符搜索`, 'info');
+      showStatus(t('statusTruncated'), 'info');
     }
 
     const results = await Promise.allSettled(promises);
@@ -99,30 +99,30 @@ async function doSearch() {
       if (result.status === 'fulfilled') {
         allImages.push(...result.value);
       } else {
-        errors.push(result.reason?.message || '搜索失败');
+        errors.push(result.reason?.message || t('statusSearchError'));
       }
     });
 
     if (allImages.length === 0) {
       const errorMsg = errors.length > 0
-        ? `搜索失败：${errors.join('；')}。请检查设置中的 API 密钥是否有效`
-        : '未找到相关图片，试试其他关键词';
+        ? `${t('statusSearchError')}：${errors.join('；')}。${t('statusCheckKey')}`
+        : t('statusNoResults');
       showStatus(errorMsg, 'error');
       showEmptyState();
       return;
     }
 
     if (errors.length > 0) {
-      showStatus(`部分源不可用：${errors.join('；')}`, 'info');
+      showStatus(`${t('showMore')}${errors.join('；')}`, 'info');
     }
 
     renderImages(allImages, searchQuery);
   } catch (err) {
-    showStatus(`搜索出错：${err.message}`, 'error');
+    showStatus(`${t('statusSearchError')}：${err.message}`, 'error');
     showEmptyState();
   } finally {
     searchBtn.disabled = false;
-    searchBtn.textContent = '搜索配图';
+    searchBtn.textContent = t('searchBtn');
   }
 }
 
@@ -254,7 +254,7 @@ function renderImages(images, query) {
   for (const [source, imgs] of Object.entries(grouped)) {
     const label = document.createElement('div');
     label.className = 'source-label';
-    label.textContent = source === 'unsplash' ? '📷 Unsplash 搜索结果' : '📷 Pexels 搜索结果';
+    label.textContent = source === 'unsplash' ? t('sourceUnsplashLabel') : t('sourcePexelsLabel');
     resultsDiv.appendChild(label);
 
     const grid = document.createElement('div');
@@ -270,7 +270,7 @@ function renderImages(images, query) {
         <span class="source-badge ${img.source}">${img.source}</span>
         <div class="photographer">${escapeHtml(img.photographer)}</div>
         <div class="overlay">
-          <span class="overlay-text">点击复制</span>
+          <span class="overlay-text">${t('overlayCopy')}</span>
         </div>
       `;
 
@@ -289,15 +289,15 @@ function renderImages(images, query) {
   const count = images.length;
   const info = document.createElement('div');
   info.style.cssText = 'text-align:center;padding:10px 0 4px;font-size:11px;color:#999';
-  info.textContent = `共找到 ${count} 张图片，点击任意图片复制 URL`;
+  info.textContent = t('resultsFound', count);
   resultsDiv.appendChild(info);
 }
 
 function copyImageUrl(url) {
   navigator.clipboard.writeText(url).then(() => {
-    showToast('✅ 图片 URL 已复制到剪贴板');
+    showToast(t('toastCopied'));
   }).catch(() => {
-    showToast('❌ 复制失败，请手动复制');
+    showToast(t('toastCopyFailed'));
   });
 }
 
@@ -326,7 +326,7 @@ function showLoading() {
   resultsDiv.innerHTML = `
     <div class="loading">
       <div class="spinner"></div>
-      <p>正在搜索配图...</p>
+      <p>${t('loadingText')}</p>
     </div>
   `;
 }
@@ -335,8 +335,8 @@ function showEmptyState() {
   resultsDiv.innerHTML = `
     <div class="empty-state">
       <div class="empty-icon">🖼️</div>
-      <p>输入文字后点击搜索，查找真实配图</p>
-      <p class="hint">支持选中文字后右键 → 「搜索配图」</p>
+      <p>${t('emptyTitle')}</p>
+      <p class="hint">${t('emptyHint')}</p>
     </div>
   `;
 }

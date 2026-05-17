@@ -1,10 +1,15 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: 'searchImageForText',
-    title: '搜索配图',
-    contexts: ['selection']
+function createContextMenu() {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: 'searchImageForText',
+      title: chrome.i18n.getMessage('contextMenuTitle'),
+      contexts: ['selection']
+    });
   });
-});
+}
+
+chrome.runtime.onInstalled.addListener(createContextMenu);
+chrome.runtime.onStartup.addListener(createContextMenu);
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'searchImageForText' && info.selectionText) {

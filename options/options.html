@@ -1,97 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>配图助手 - 设置</title>
+  <title data-i18n="optionsTitle">配图助手 - 设置</title>
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>配图助手设置</h1>
-      <p class="desc">配置图片搜索 API 密钥，密钥免费申请，用于搜索真实照片</p>
+      <h1 data-i18n="optionsTitle">配图助手设置</h1>
+      <p class="desc" data-i18n="optionsDesc">配置图片搜索 API 密钥，密钥免费申请，用于搜索真实照片</p>
     </header>
 
     <section class="api-section">
-      <h2>Unsplash API</h2>
+      <h2 data-i18n="unsplashSection">Unsplash API</h2>
       <div class="api-card">
         <div class="api-info">
-          <p>提供高质量真实摄影图片，免费额度：<strong>50 次/小时</strong></p>
+          <p data-i18n="unsplashDesc">提供高质量真实摄影图片，免费额度：<strong>50 次/小时</strong></p>
           <ol class="steps">
-            <li>访问 <a href="https://unsplash.com/developers" target="_blank">unsplash.com/developers</a></li>
-            <li>注册/登录，创建新应用</li>
-            <li>复制 <code>Access Key</code> 粘贴到下方</li>
+            <li><span data-i18n="unsplashStep1">访问 <a href="https://unsplash.com/developers" target="_blank">unsplash.com/developers</a></span></li>
+            <li data-i18n="unsplashStep2">注册/登录，创建新应用</li>
+            <li data-i18n="unsplashStep3">复制 <code>Access Key</code> 粘贴到下方</li>
           </ol>
         </div>
         <div class="api-input-group">
-          <label for="unsplashKey">Access Key</label>
+          <label for="unsplashKey" data-i18n="unsplashLabel">Access Key</label>
           <div class="input-row">
-            <input type="password" id="unsplashKey" placeholder="输入 Unsplash Access Key">
-            <button class="toggle-visibility" data-target="unsplashKey">显示</button>
+            <input type="password" id="unsplashKey" data-i18n="unsplashPlaceholder" data-i18n-attr="placeholder" placeholder="输入 Unsplash Access Key">
+            <button class="toggle-visibility" data-target="unsplashKey" data-i18n="show">显示</button>
           </div>
         </div>
       </div>
     </section>
 
     <section class="api-section">
-      <h2>Pexels API</h2>
+      <h2 data-i18n="pexelsSection">Pexels API</h2>
       <div class="api-card">
         <div class="api-info">
-          <p>提供高质量真实摄影图片，免费额度：<strong>200 次/小时</strong></p>
+          <p data-i18n="pexelsDesc">提供高质量真实摄影图片，免费额度：<strong>200 次/小时</strong></p>
           <ol class="steps">
-            <li>访问 <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a></li>
-            <li>注册/登录，获取 API Key</li>
-            <li>复制 API Key 粘贴到下方</li>
+            <li><span data-i18n="pexelsStep1">访问 <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a></span></li>
+            <li data-i18n="pexelsStep2">注册/登录，获取 API Key</li>
+            <li data-i18n="pexelsStep3">复制 API Key 粘贴到下方</li>
           </ol>
         </div>
         <div class="api-input-group">
-          <label for="pexelsKey">API Key</label>
+          <label for="pexelsKey" data-i18n="pexelsLabel">API Key</label>
           <div class="input-row">
-            <input type="password" id="pexelsKey" placeholder="输入 Pexels API Key">
-            <button class="toggle-visibility" data-target="pexelsKey">显示</button>
+            <input type="password" id="pexelsKey" data-i18n="pexelsPlaceholder" data-i18n-attr="placeholder" placeholder="输入 Pexels API Key">
+            <button class="toggle-visibility" data-target="pexelsKey" data-i18n="show">显示</button>
           </div>
         </div>
       </div>
     </section>
 
     <section class="api-section">
-      <h2>OpenRouter AI（关键词提取）</h2>
+      <h2 data-i18n="openrouterSection">OpenRouter AI（关键词提取）</h2>
       <div class="api-card">
         <div class="api-info">
-          <p>文字超过10字时，自动用AI提取最多5个关键词再搜索，结果更精准。<strong>免费模型可用</strong></p>
+          <p data-i18n="openrouterDesc">文字超过10字时，自动用AI提取最多5个关键词再搜索，结果更精准。<strong>免费模型可用</strong></p>
           <ol class="steps">
-            <li>访问 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></li>
-            <li>注册/登录，创建 API Key</li>
-            <li>复制 Key 粘贴到下方（选填，不配则直接用原文搜索）</li>
+            <li><span data-i18n="openrouterStep1">访问 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></span></li>
+            <li data-i18n="openrouterStep2">注册/登录，创建 API Key</li>
+            <li data-i18n="openrouterStep3">复制 Key 粘贴到下方（选填，不配则直接用原文搜索）</li>
           </ol>
         </div>
         <div class="api-input-group">
-          <label for="openrouterKey">API Key</label>
+          <label for="openrouterKey" data-i18n="openrouterLabel">API Key</label>
           <div class="input-row">
-            <input type="password" id="openrouterKey" placeholder="输入 OpenRouter API Key（选填）">
-            <button class="toggle-visibility" data-target="openrouterKey">显示</button>
+            <input type="password" id="openrouterKey" data-i18n="openrouterPlaceholder" data-i18n-attr="placeholder" placeholder="输入 OpenRouter API Key（选填）">
+            <button class="toggle-visibility" data-target="openrouterKey" data-i18n="show">显示</button>
           </div>
         </div>
       </div>
     </section>
 
     <div class="actions">
-      <button id="saveBtn" class="btn-primary">保存设置</button>
+      <button id="saveBtn" class="btn-primary" data-i18n="saveBtn">保存设置</button>
       <span id="saveStatus" class="save-status hidden"></span>
     </div>
 
     <div class="usage-note">
-      <h3>💡 使用说明</h3>
+      <h3 data-i18n="usageTitle">💡 使用说明</h3>
       <ul>
-        <li>至少配置一个 API 密钥即可使用</li>
-        <li>两个都配置可获取更多结果</li>
-        <li>密钥仅存储在本地浏览器，不会上传</li>
-        <li>搜索后点击图片即可复制图片 URL，粘贴到公众号编辑器即可</li>
+        <li data-i18n="usageItem1">至少配置一个 API 密钥即可使用</li>
+        <li data-i18n="usageItem2">两个都配置可获取更多结果</li>
+        <li data-i18n="usageItem3">密钥仅存储在本地浏览器，不会上传</li>
+        <li data-i18n="usageItem4">搜索后点击图片即可复制图片 URL，粘贴到公众号编辑器即可</li>
       </ul>
     </div>
   </div>
 
+  <script src="../shared.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "配图助手",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
-  "description": "为公众号文章搜索真实配图 - 输入文字，从全网搜索真实照片，告别AI假图",
+  "default_locale": "zh_CN",
+  "description": "__MSG_extDesc__",
   "permissions": [
     "contextMenus",
     "storage",
