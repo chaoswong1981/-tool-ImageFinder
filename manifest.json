@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "配图助手",
+  "version": "1.0.0",
+  "description": "为公众号文章搜索真实配图 - 输入文字，从全网搜索真实照片，告别AI假图",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://api.unsplash.com/*",
+    "https://api.pexels.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "配图助手"
+  },
+  "options_page": "options/options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

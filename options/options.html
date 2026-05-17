@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配图助手 - 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>配图助手设置</h1>
+      <p class="desc">配置图片搜索 API 密钥，密钥免费申请，用于搜索真实照片</p>
+    </header>
+
+    <section class="api-section">
+      <h2>Unsplash API</h2>
+      <div class="api-card">
+        <div class="api-info">
+          <p>提供高质量真实摄影图片，免费额度：<strong>50 次/小时</strong></p>
+          <ol class="steps">
+            <li>访问 <a href="https://unsplash.com/developers" target="_blank">unsplash.com/developers</a></li>
+            <li>注册/登录，创建新应用</li>
+            <li>复制 <code>Access Key</code> 粘贴到下方</li>
+          </ol>
+        </div>
+        <div class="api-input-group">
+          <label for="unsplashKey">Access Key</label>
+          <div class="input-row">
+            <input type="password" id="unsplashKey" placeholder="输入 Unsplash Access Key">
+            <button class="toggle-visibility" data-target="unsplashKey">显示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="api-section">
+      <h2>Pexels API</h2>
+      <div class="api-card">
+        <div class="api-info">
+          <p>提供高质量真实摄影图片，免费额度：<strong>200 次/小时</strong></p>
+          <ol class="steps">
+            <li>访问 <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a></li>
+            <li>注册/登录，获取 API Key</li>
+            <li>复制 API Key 粘贴到下方</li>
+          </ol>
+        </div>
+        <div class="api-input-group">
+          <label for="pexelsKey">API Key</label>
+          <div class="input-row">
+            <input type="password" id="pexelsKey" placeholder="输入 Pexels API Key">
+            <button class="toggle-visibility" data-target="pexelsKey">显示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button id="saveBtn" class="btn-primary">保存设置</button>
+      <span id="saveStatus" class="save-status hidden"></span>
+    </div>
+
+    <div class="usage-note">
+      <h3>💡 使用说明</h3>
+      <ul>
+        <li>至少配置一个 API 密钥即可使用</li>
+        <li>两个都配置可获取更多结果</li>
+        <li>密钥仅存储在本地浏览器，不会上传</li>
+        <li>搜索后点击图片即可复制图片 URL，粘贴到公众号编辑器即可</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

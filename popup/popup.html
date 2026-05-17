@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配图助手</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>配图助手</h1>
+      <span class="subtitle">为文字找到真实的配图</span>
+    </header>
+
+    <div class="search-section">
+      <textarea id="textInput" placeholder="输入文章段落或关键词，搜索真实配图..." rows="3"></textarea>
+      <div class="search-controls">
+        <div class="source-filters">
+          <label class="source-option active" data-source="all">
+            <input type="radio" name="source" value="all" checked hidden>
+            <span>全部</span>
+          </label>
+          <label class="source-option" data-source="unsplash">
+            <input type="radio" name="source" value="unsplash" hidden>
+            <span>Unsplash</span>
+          </label>
+          <label class="source-option" data-source="pexels">
+            <input type="radio" name="source" value="pexels" hidden>
+            <span>Pexels</span>
+          </label>
+        </div>
+        <button id="searchBtn">搜索配图</button>
+      </div>
+    </div>
+
+    <div id="status" class="status hidden"></div>
+
+    <div id="results" class="results">
+      <div class="empty-state">
+        <div class="empty-icon">🖼️</div>
+        <p>输入文字后点击搜索，查找真实配图</p>
+        <p class="hint">支持选中文字后右键 → 「搜索配图」</p>
+      </div>
+    </div>
+
+    <footer>
+      <a href="#" id="openOptions" class="footer-link">⚙️ 设置 API 密钥</a>
+      <span class="footer-text">点击图片复制 URL</span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
