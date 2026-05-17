@@ -11,7 +11,8 @@
   ],
   "host_permissions": [
     "https://api.unsplash.com/*",
-    "https://api.pexels.com/*"
+    "https://api.pexels.com/*",
+    "https://openrouter.ai/*"
   ],
   "background": {
     "service_worker": "background.js"

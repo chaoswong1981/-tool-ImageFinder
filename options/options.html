@@ -55,6 +55,27 @@
       </div>
     </section>
 
+    <section class="api-section">
+      <h2>OpenRouter AI（关键词提取）</h2>
+      <div class="api-card">
+        <div class="api-info">
+          <p>文字超过10字时，自动用AI提取最多5个关键词再搜索，结果更精准。<strong>免费模型可用</strong></p>
+          <ol class="steps">
+            <li>访问 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></li>
+            <li>注册/登录，创建 API Key</li>
+            <li>复制 Key 粘贴到下方（选填，不配则直接用原文搜索）</li>
+          </ol>
+        </div>
+        <div class="api-input-group">
+          <label for="openrouterKey">API Key</label>
+          <div class="input-row">
+            <input type="password" id="openrouterKey" placeholder="输入 OpenRouter API Key（选填）">
+            <button class="toggle-visibility" data-target="openrouterKey">显示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="actions">
       <button id="saveBtn" class="btn-primary">保存设置</button>
       <span id="saveStatus" class="save-status hidden"></span>

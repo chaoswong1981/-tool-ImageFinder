@@ -29,7 +29,7 @@ textInput.addEventListener('keydown', (e) => {
 searchBtn.addEventListener('click', doSearch);
 
 async function doSearch() {
-  const query = textInput.value.trim();
+  let query = textInput.value.trim();
   if (!query) {
     showStatus('请输入要搜索的文字', 'error');
     textInput.focus();
@@ -46,26 +46,46 @@ async function doSearch() {
   showLoading();
   resultsDiv.scrollTop = 0;
 
+  const { unsplashKey, pexelsKey, openrouterKey } = await chrome.storage.sync.get(['unsplashKey', 'pexelsKey', 'openrouterKey']);
+
+  let searchQuery = query;
+  let summarized = false;
+
+  if (query.length > 10 && openrouterKey) {
+    try {
+      const keywords = await summarizeWithOpenRouter(query, openrouterKey);
+      if (keywords) {
+        searchQuery = keywords;
+        summarized = true;
+      }
+    } catch (e) {
+      // fallback to original text
+    }
+  }
+
   try {
-    const { unsplashKey, pexelsKey } = await chrome.storage.sync.get(['unsplashKey', 'pexelsKey']);
     const promises = [];
 
     if (currentSource === 'all' || currentSource === 'unsplash') {
       if (unsplashKey) {
-        promises.push(searchUnsplash(query, unsplashKey));
+        promises.push(searchUnsplash(searchQuery, unsplashKey));
       }
     }
 
     if (currentSource === 'all' || currentSource === 'pexels') {
       if (pexelsKey) {
-        promises.push(searchPexels(query, pexelsKey));
+        promises.push(searchPexels(searchQuery, pexelsKey));
       }
     }
 
     if (promises.length === 0) {
-      showStatus('请先在设置中配置 API 密钥', 'error');
+      showStatus('请先在设置中配置图片搜索 API 密钥', 'error');
       showEmptyState();
       return;
+    }
+
+    if (summarized) {
+      showStatus(`已提取关键词：${searchQuery}`, 'info');
     }
 
     const results = await Promise.allSettled(promises);
@@ -89,7 +109,7 @@ async function doSearch() {
       return;
     }
 
-    renderImages(allImages, query);
+    renderImages(allImages, searchQuery);
   } catch (err) {
     showStatus(`搜索出错：${err.message}`, 'error');
     showEmptyState();
@@ -97,6 +117,40 @@ async function doSearch() {
     searchBtn.disabled = false;
     searchBtn.textContent = '搜索配图';
   }
+}
+
+async function summarizeWithOpenRouter(text, apiKey) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://github.com/opencode',
+      'X-Title': '配图助手',
+    },
+    body: JSON.stringify({
+      model: 'google/gemini-2.0-flash-lite-preview-02-05:free',
+      messages: [
+        {
+          role: 'user',
+          content: `将以下文字总结为最多5个关键词用于图片搜索，只返回关键词用空格分隔，不要任何解释和标点符号：\n\n${text}`
+        }
+      ],
+      max_tokens: 50,
+      temperature: 0.3,
+    })
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  const data = await res.json();
+  const content = data?.choices?.[0]?.message?.content?.trim();
+  if (!content) return null;
+
+  const words = content.split(/[\s,，、]+/).filter(Boolean).slice(0, 5);
+  return words.length > 0 ? words.join(' ') : null;
 }
 
 async function searchUnsplash(query, apiKey) {
