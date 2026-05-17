@@ -154,9 +154,12 @@ async function summarizeWithOpenRouter(text, apiKey) {
 }
 
 async function searchUnsplash(query, apiKey) {
-  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=30&orientation=landscape`;
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=20`;
   const res = await fetch(url, {
-    headers: { 'Authorization': `Client-ID ${apiKey}` }
+    headers: {
+      'Authorization': `Client-ID ${apiKey}`,
+      'Accept-Version': 'v1'
+    }
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
